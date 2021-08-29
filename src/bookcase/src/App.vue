@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 import store from "./store";
 
 export default defineComponent({
@@ -23,6 +23,8 @@ export default defineComponent({
   setup() {
     const isBusy = computed(() => store.state.isBusy);
     const error = computed(() => store.state.error);
+
+    onMounted(() => store.dispatch("loadShelf"));
 
     return {
       isBusy,

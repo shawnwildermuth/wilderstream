@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { loadBooksByCategory } from "../http/bookapi";
+import { loadBooksByCategory, loadShelf, loadWork } from "../http/bookapi";
 import { Work } from "../models/books";
 
 export default createStore({
@@ -32,6 +32,27 @@ export default createStore({
     },
     removeBookFromShelf({ commit }, book: Work) {
       commit("removeFromShelf", book);
+    },
+    async loadShelf({state, commit}) {
+      commit("setError", "");
+      commit("setIsBusy");
+      try {
+        const results = await loadShelf();
+        if (results) {
+          for (let x = 0; x < results.length; ++x) {
+            const workResult = await loadWork(results[x]);
+            if (workResult) {
+              commit("addToShelf", workResult);
+            }
+          }
+        }
+        else commit("setError", "Failed to load the shelf");
+      } catch (error) {
+        commit("setError", "Exception thrown while loading the shelf");
+      } finally {
+        commit("clearIsBusy");
+      }
+
     },
     async loadBookList({ state, commit }, category: string) {
 

@@ -52,7 +52,8 @@ export default defineComponent({
     }
 
     function bookOnShelf(book: Work) {
-      return store.state.shelf.find(b => b.key === book.key);
+      const result = store.state.shelf.findIndex(b => b.key == book.key);
+      return result > -1;
     }
 
     return {
