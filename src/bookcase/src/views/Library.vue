@@ -1,8 +1,8 @@
 <template>
-  <h1>My Bookcase</h1>
+  <h1>Find Book</h1>
   <div>
     <label for="category">Book Categories: </label>
-    <select id="categories" @change="load(currentCategory)" v-model="currentCategory">
+    <select id="categories" @change="load()" v-model="currentCategory">
       <option v-for="c in categories" :key="c.id" :value="c.id">{{
         c.name
       }}</option>
@@ -11,13 +11,8 @@
   <div>Shelf Size: {{ shelfSize}}</div>
   <div class="flex flex-wrap">
     <div v-for="book in books" :key="book.key" class="book-item">
-      <img
-        :src="`//covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`"
-        :alt="book.title"
-      />
-      <div class="text-lg">{{ book.title }}</div>
-      <div class="text-md">{{ book.authors[0].name }}</div>
-      <div><button @click="add(book)" :disabled="bookOnShelf(book)">Add to Shelf</button></div>
+      <Book :book="book"></Book>
+      <div><button class="btn"  @click="add(book)" :disabled="bookOnShelf(book)">Add to Shelf</button></div>
     </div>
   </div>
 </template>
@@ -25,25 +20,31 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, Ref, ref } from "vue";
 import { Work } from "../models/books";
+import Book from "../components/Book.vue";
+
 import store from "../store";
 
 export default defineComponent({
+  components: {
+    Book
+  },
   setup() {
     const books = computed(() => store.state.bookList);
     const shelfSize = computed(() => store.state.shelf.length);
-
+    
     const categories = [
       { id: "science_fiction", name: "Science Fiction" },
       { id: "biography", name: "Biography" },
       { id: "science", name: "Science" },
       { id: "technology", name: "Technology" },
     ];
-    const currentCategory = ref("science_fiction");
 
-    onMounted(async () => await load("science_fiction"));
+    const currentCategory = ref(store.state.currentCategory);
 
-    async function load(category: string) {
-      await store.dispatch("loadBookList", category);
+    onMounted(async () => await load());
+
+    async function load() {
+      await store.dispatch("loadBookList", currentCategory.value);
     }
 
     function add(book: Work) {

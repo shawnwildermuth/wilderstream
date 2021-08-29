@@ -7,6 +7,7 @@ export default createStore({
     bookList: new Array<Work>(),
     shelf: new Array<Work>(),
     isBusy: false,
+    currentCategory: "science_fiction",
     error: ""
   },
   mutations: {
@@ -16,27 +17,38 @@ export default createStore({
     addToShelf: (state, book) => {
       if (!state.shelf.find(b => b.key === book.key)) state.shelf.push(book);
     },
-    setError: (state, error: string) => state.error = error, 
-    setIsBusy: (state) => state.isBusy = true, 
-    clearIsBusy: (state) => state.isBusy = false 
+    removeFromShelf: (state, book) => {
+      const index = state.shelf.findIndex(b => b.key === book.key);
+      if (index > -1) state.shelf.splice(index, 1);
+    },
+    setCurrentCategory: (state, category) => state.currentCategory = category,
+    setError: (state, error: string) => state.error = error,
+    setIsBusy: (state) => state.isBusy = true,
+    clearIsBusy: (state) => state.isBusy = false
   },
   actions: {
     addBookToShelf({ commit }, book: Work) {
       commit("addToShelf", book);
     },
-    async loadBookList({ commit }, category: string) {
-      
-      commit("setError", "");
-      commit("setIsBusy");
-      
-      try {
-        const results = await loadBooksByCategory(category);
-        if (results) commit("setBookList", results);
-        else commit("setError", "Failed to load any books");
-      } catch (error) {
-        commit("setError", "Exception thrown while getting books");
-      } finally {
-        commit("clearIsBusy");
+    removeBookFromShelf({ commit }, book: Work) {
+      commit("removeFromShelf", book);
+    },
+    async loadBookList({ state, commit }, category: string) {
+
+      if (state.currentCategory !== category || state.bookList.length === 0) {
+        commit("setCurrentCategory", category);
+        commit("setError", "");
+        commit("setIsBusy");
+
+        try {
+          const results = await loadBooksByCategory(category);
+          if (results) commit("setBookList", results);
+          else commit("setError", "Failed to load any books");
+        } catch (error) {
+          commit("setError", "Exception thrown while getting books");
+        } finally {
+          commit("clearIsBusy");
+        }
       }
     }
   }

@@ -6,3 +6,11 @@
 }
 
 @tailwind utilities;
+
+.btn {
+  @apply bg-blue-800 text-white p-2 rounded;
+}
+
+a.btn {
+  @apply no-underline;
+}
