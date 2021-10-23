@@ -1,12 +1,12 @@
 // router/index.ts
 
 import { createRouter, createWebHashHistory } from "vue-router";
-import Library from "../views/Library.vue";
-import Shelf from "../views/Shelf.vue";
+import SearchView from "../views/SearchView.vue";
+import ShelfView from "../views/ShelfView.vue";
 
 const routes = [
-  { path: "/", component: Shelf },
-  { path: "/add", component: Library }
+  { path: "/", component: ShelfView },
+  { path: "/add", component: SearchView }
 ];
 
 const router = createRouter({

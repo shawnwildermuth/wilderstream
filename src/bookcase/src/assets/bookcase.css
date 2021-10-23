@@ -1,20 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@200;400&family=Source+Serif+Pro&display=swap');
+
 @tailwind base;
 @tailwind components;
-
-.book-item {
-  @apply border border-solid border-yellow-600 text-center w-48 m-2 p-2 hover:bg-gray-300 rounded;
-}
-
 @tailwind utilities;
 
-.btn {
-  @apply bg-blue-800 text-white p-2 rounded;
-}
+@layer utilities {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-bold;
+  }
+  body {
+    @apply font-sans font-extralight text-lg;
+  }
+  input, button {
+    @apply font-sans font-extralight text-lg p-1 m-1 border-gray-200 border-solid;
+  }
 
-.btn[disabled] {
-  @apply bg-gray-200 text-black p-2 rounded;
-}
+  button {
+    @apply cursor-pointer;
+  }
 
-a.btn {
-  @apply no-underline;
+  .btn {
+    @apply bg-blue-600 py-1 px-2 text-white border-none my-1 hover:bg-blue-800;
+  }
+
+  .btn[disabled] {
+    @apply bg-gray-200 text-gray-500 cursor-not-allowed;
+  }
+
+  a.btn {
+    @apply no-underline;
+  }
 }

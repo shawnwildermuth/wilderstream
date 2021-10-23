@@ -5,13 +5,16 @@
       <Book :book="book"></Book>
       <div><button class="btn" @click="remove(book)">Remove from Shelf</button></div>
     </div>
+    <div v-if="shelf.length == 0">
+      <p>No books in your library <router-link to="/add">click here</router-link> to search for new books.</p>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import store from "../store";
-import Book from "../components/Book.vue";
+import Book from "../components/BookControl.vue";
 import { Work } from "../models/books";
 
 export default defineComponent({

@@ -1,11 +1,15 @@
 module.exports = {
-  purge: [],
+  mode: 'jit',
+  purge: ["**/*.html", "**/*.vue"],
   corePlugins: {
     preflight: false,
   },
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    fontFamily: {
+      sans: ["Lato", "sans-serif"],
+      serif: ["'Source Serif Pro'", "serif"],
+    },
   },
   variants: {
     extend: {},
