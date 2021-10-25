@@ -2,8 +2,7 @@
   <h1>My Bookshelf</h1>
   <div class="flex flex-wrap">
     <div v-for="book in shelf" :key="book.key"  class="book-item">
-      <Book :book="book"></Book>
-      <div><button class="btn" @click="remove(book)">Remove from Shelf</button></div>
+      <Book :book="book" actionText="Remvoe from Shelf" @bookAction="remove(book)" ></Book>
     </div>
     <div v-if="shelf.length == 0">
       <p>No books in your library <router-link to="/add">click here</router-link> to search for new books.</p>

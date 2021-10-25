@@ -45,7 +45,7 @@ export default defineComponent({
   setup(props, { emit }) {
 
     let coverUrl = props.book.coverUrl;
-    if (!coverUrl || coverUrl.includes("undefined")) coverUrl = "img/nocover-jpg"
+    if (!coverUrl || coverUrl.includes("undefined")) coverUrl = "/img/nocover.jpg"
     return {
       coverUrl,
       action: () => {
@@ -63,6 +63,6 @@ export default defineComponent({
 }
 
 .book-control .book-control-img {
-  @apply w-24 h-36 bg-contain bg-no-repeat m-1;
+  @apply w-24 h-36 bg-contain bg-no-repeat bg-center m-1 shadow-md hover:shadow-xl;
 }
 </style>

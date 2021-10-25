@@ -29,7 +29,7 @@ export default defineComponent({
   setup() {
     const books = computed(() => store.state.bookList);
     
-    const searchPhrase = ref("");
+    const searchPhrase = ref("Lord of the Rings");
 
     function doSearch() {
       store.dispatch("searchForBooks", searchPhrase.value);

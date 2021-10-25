@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { searchForBooks } from "../http/bookapi";
+import { searchForBooks, loadShelf, loadWork } from "../http/bookapi";
 import { Book } from "../models/book";
 
 export default createStore({
@@ -7,7 +7,8 @@ export default createStore({
     bookList: new Array<Book>(),
     shelf: new Array<Book>(),
     isBusy: false,
-    error: ""
+    error: "", 
+    currentUser: "swildermuth"
   },
   mutations: {
     setBookList(state, list: Array<Book>) {
@@ -27,6 +28,8 @@ export default createStore({
   actions: {
     addBookToShelf({ commit }, book: Book) {
       commit("addToShelf", book);
+      // Store Shelf
+      
     },
     removeBookFromShelf({ commit }, book: Book) {
       commit("removeFromShelf", book);
@@ -34,22 +37,22 @@ export default createStore({
     async loadShelf({state, commit}) {
       commit("setError", "");
       commit("setIsBusy");
-      // try {
-      //   const results = await loadShelf();
-      //   if (results) {
-      //     for (let x = 0; x < results.length; ++x) {
-      //       const workResult = await loadWork(results[x]);
-      //       if (workResult) {
-      //         commit("addToShelf", workResult);
-      //       }
-      //     }
-      //   }
-      //   else commit("setError", "Failed to load the shelf");
-      // } catch (error) {
-      //   commit("setError", "Exception thrown while loading the shelf");
-      // } finally {
+      try {
+        const results = await loadShelf();
+        if (results) {
+          for (let x = 0; x < results.length; ++x) {
+            const workResult = await loadWork(results[x]);
+            if (workResult) {
+              commit("addToShelf", workResult);
+            }
+          }
+        }
+        else commit("setError", "Failed to load the shelf");
+      } catch (error) {
+        commit("setError", "Exception thrown while loading the shelf");
+      } finally {
          commit("clearIsBusy");
-      // }
+      }
 
     },
     async searchForBooks({ state, commit }, search: string) {
