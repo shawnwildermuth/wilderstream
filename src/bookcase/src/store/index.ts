@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { searchForBooks, loadShelf, loadWork } from "../http/bookapi";
+import { searchForBooks, loadShelf, loadBook, addToShelf, removeFromShelf } from "../http/bookapi";
 import { Book } from "../models/book";
 
 export default createStore({
@@ -26,13 +26,19 @@ export default createStore({
     clearIsBusy: (state) => state.isBusy = false
   },
   actions: {
-    addBookToShelf({ commit }, book: Book) {
+    async addBookToShelf({ commit }, book: Book) {
       commit("addToShelf", book);
       // Store Shelf
-      
+      if (!(await addToShelf(book.key))) {
+        commit("setError", "Failed to update shelf");
+      }
     },
-    removeBookFromShelf({ commit }, book: Book) {
+    async removeBookFromShelf({ commit }, book: Book) {
       commit("removeFromShelf", book);
+      // Store Shelf
+      if (!(await removeFromShelf(book.key))) {
+        commit("setError", "Failed to update shelf");
+      }
     },
     async loadShelf({state, commit}) {
       commit("setError", "");
@@ -41,9 +47,9 @@ export default createStore({
         const results = await loadShelf();
         if (results) {
           for (let x = 0; x < results.length; ++x) {
-            const workResult = await loadWork(results[x]);
-            if (workResult) {
-              commit("addToShelf", workResult);
+            const book = await loadBook(results[x]);
+            if (book) {
+              commit("addToShelf", book);
             }
           }
         }

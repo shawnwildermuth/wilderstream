@@ -5,12 +5,12 @@
         class="book-control-img"
         :style="{ 'background-image': 'url(' + coverUrl + ')' }"
       ></div>
-      <div>
-        <div class="text-lg">{{ book.title }}</div>
-        <div class="text-md">{{ book.author }}</div>
+      <div class="w-48">
+        <div class="text-md px-1">{{ book.title }}</div>
+        <div class="text-sm px-1">{{ book.author }}</div>
         <div v-if="showAction">
-          <button class="btn" @click='$emit("bookAction", book)' :disabled="disabled">
-            Add to Shelf
+          <button class="btn text-sm rounded" @click='$emit("bookAction", book)' :disabled="disabled">
+            {{ actionText }}
           </button>
         </div>
       </div>
@@ -31,7 +31,8 @@ export default defineComponent({
       required: true,
     },
     actionText: {
-      type: String
+      type: String,
+      default: "Add to Shelf"
     },
     showAction: {
       type: Boolean,

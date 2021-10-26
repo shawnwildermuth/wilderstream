@@ -1,26 +1,55 @@
 <template>
-  <div class="container bg-white mx-auto p-2 m-0 min-h-screen">
-    <header class="flex justify-between">
-      <h1><router-link to="/"  class="no-underline text-blue-700"><fa-icon icon="book" /> Your Bookshelf</router-link></h1>
-      <ul class="flex list-none menu">
-        <li class="ml-0 mr-1"><router-link to="/" class="menu-item">Home</router-link></li>
-        <li class="ml-0 mr-1"><router-link to="/add" class="menu-item">Add to Library</router-link></li>
+  <div
+    v-if="isBusy"
+    class="
+      w-full
+      h-full
+      opacity-50
+      bg-black
+      fixed
+      z-50
+      flex
+      justify-center
+      items-center
+    "
+  >
+    <div class="text-2xl text-white p-1">
+      <fa-icon icon="spinner" spin /> Loading!
+    </div>
+  </div>
+  <div class="container bg-white mx-auto m-0 min-h-screen">
+    <header class="flex justify-between bg-blue-800 text-white p-2">
+      <div class="p-1 text-3xl">
+        <router-link to="/" class="no-underline text-white"
+          ><fa-icon icon="book" /> Your Bookshelf</router-link
+        >
+      </div>
+      <ul class="flex list-none menu m-0 items-center">
+        <li class="ml-0 mr-1">
+          <router-link to="/" class="menu-item">Home</router-link>
+        </li>
+        <li class="ml-0 mr-1">
+          <router-link to="/add" class="menu-item">Add to Library</router-link>
+        </li>
       </ul>
     </header>
-    <div v-if="isBusy" class="text-4xl text-yellow-600">Loading!</div>
-    <div v-if="error" class="text-4xl text-red-500">{{ error }}</div>
-    <router-view></router-view>
-</div>
+    <div v-if="error" class="text-xl bg-red-500 text-white p-1">
+      <fa-icon icon="exclamation" transform="shrink-6" mask="circle" />
+      {{ error }}
+    </div>
+    <main class="p-1">
+      <router-view></router-view>
+    </main>
+  </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue'
+import { computed, defineComponent, onMounted } from "vue";
 import store from "./store";
 
 export default defineComponent({
-  name: 'App',
-  components: {
-  }, 
+  name: "App",
+  components: {},
   setup() {
     const isBusy = computed(() => store.state.isBusy);
     const error = computed(() => store.state.error);
@@ -29,24 +58,22 @@ export default defineComponent({
 
     return {
       isBusy,
-      error
+      error,
     };
-  }
-})
+  },
+});
 </script>
 
 <style lang="postcss">
-
 .menu {
-  @apply mr-4   text-blue-700;
+  @apply mr-4;
 }
 
 .menu li a {
-  @apply no-underline py-2 px-1  text-blue-700 hover:bg-blue-100;
+  @apply no-underline py-2 px-1 hover:bg-blue-600 text-white rounded;
 }
 
 .menu li:not(:last-child):after {
-  content: " |"
+  content: " |";
 }
 </style>
-

@@ -3,6 +3,7 @@ export interface Doc {
 	title: string;
 	cover_edition_key: string;
 	author_name: string[];
+  edition_key: string[]
 }
 
 export interface SearchResult {

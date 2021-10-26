@@ -12,12 +12,9 @@ var app = bldr.Build();
 
 app.UseCors(cfg =>
 {
-  if (app.Environment.IsDevelopment())
-  {
-    cfg.AllowAnyOrigin();
-    cfg.AllowAnyMethod();
-    cfg.AllowAnyHeader();
-  }
+  cfg.AllowAnyOrigin();
+  cfg.AllowAnyMethod();
+  cfg.AllowAnyHeader();
 });
 
 // Conver to Auth
