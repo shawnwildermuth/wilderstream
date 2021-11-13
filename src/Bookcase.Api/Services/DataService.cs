@@ -1,31 +1,26 @@
-using System.Linq;
-using System.Net;
-using Bookcase.Api.Data;
-using Microsoft.AspNetCore.Http;
-
-namespace Bookcase.Api.Services;
+namespace Bookcase.Services;
 
 public class DataService
 {
-  private readonly Container _container;
+  private readonly ContainerFactory _factory;
 
-  public DataService(IConfiguration config)
+  public DataService(ContainerFactory factory)
   {
-    var options = new CosmosClientOptions()
-    {
-      SerializerOptions = new CosmosSerializationOptions()
-      {
-        PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-      }
-    };
-    var client = new CosmosClient(config["Cosmos:ConnectionString"], options);
-    _container = client.GetContainer(config["Cosmos:DbName"], config["Cosmos:ContainerName"]);
+    _factory = factory;
   }
 
   async Task<ShelfOwner?> GetShelfOwnerAsync(string userId)
   {
-    var response = await this._container.ReadItemAsync<ShelfOwner>(userId, new PartitionKey(userId));
-    return response.Resource;
+    try
+    {
+      var container = await _factory.Get();
+      var response = await container.ReadItemAsync<ShelfOwner?>(userId, new PartitionKey(userId));
+      return response.Resource;
+    }
+    catch
+    {
+      return null;
+    }
   }
 
   public async Task<IEnumerable<string>?> GetShelfItemsAsync(string userId)
@@ -36,17 +31,18 @@ public class DataService
 
   public async Task<IEnumerable<string>?> UpsertShelfItemAsync(string userId, string bookId)
   {
+    var container = await _factory.Get();
     var user = await GetShelfOwnerAsync(userId);
     if (user is null)
     {
       user = new ShelfOwner() { Id = userId, Name = "", Shelf = new List<string> { bookId } };
-      await _container.CreateItemAsync<ShelfOwner>(user, new PartitionKey(userId));
+      await container.CreateItemAsync<ShelfOwner>(user, new PartitionKey(userId));
     }
     else
     {
       if (user.Shelf.Contains(bookId)) return null;
       user.Shelf.Add(bookId);
-      await _container.ReplaceItemAsync<ShelfOwner>(user, user.Id, new PartitionKey(user.Id));
+      await container.ReplaceItemAsync<ShelfOwner>(user, user.Id, new PartitionKey(user.Id));
     }
     return user.Shelf;
   }
@@ -59,7 +55,8 @@ public class DataService
       if (user.Shelf.Contains(bookId))
       {
         user.Shelf.Remove(bookId);
-        await _container.ReplaceItemAsync<ShelfOwner>(user, user.Id, new PartitionKey(user.Id));
+        var container = await _factory.Get();
+        await container.ReplaceItemAsync<ShelfOwner>(user, user.Id, new PartitionKey(user.Id));
         return true;
       }
     }

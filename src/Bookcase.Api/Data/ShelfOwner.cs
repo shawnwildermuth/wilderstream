@@ -1,4 +1,4 @@
-namespace Bookcase.Api.Data;
+namespace Bookcase.Data;
 
 public class ShelfOwner
 {

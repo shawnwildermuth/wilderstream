@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "npm-run-all -p dev:*",
     "dev:client": "vite",
-    "dev:server": "dotnet watch run --project ..\\Bookcase.Api\\Bookcase.Api.csproj",
+    "dev:server": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet watch run --project ..\\Bookcase.Api\\Bookcase.Api.csproj",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
   },
