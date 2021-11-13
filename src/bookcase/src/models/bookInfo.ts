@@ -4,19 +4,19 @@ export interface Author {
 }
 
 export interface Identifier {
-  librarything: string[];
-  goodreads: string[];
-  isbn_10: string[];
-  isbn_13: string[];
-  lccn: string[];
-  oclc: string[];
-  openlibrary: string[];
+  librarything?: string[];
+  goodreads?: string[];
+  isbn_10?: string[];
+  isbn_13?: string[];
+  lccn?: string[];
+  oclc?: string[];
+  openlibrary?: string[];
 }
 
 export interface Classification {
-  lccn_permalink: string[];
-  lc_classifications: string[];
-  dewey_decimal_class: string[];
+  lccn_permalink?: string[];
+  lc_classifications?: string[];
+  dewey_decimal_class?: string[];
 }
 
 export interface Publisher {
@@ -70,6 +70,8 @@ export interface Ebook {
   preview_url: string;
   availability: string;
   formats: Format;
+  borrow_url?: string;
+  checkedout?: Boolean
 }
 
 export interface Cover {
@@ -85,7 +87,7 @@ export interface BookInfo {
   authors: Author[];
   number_of_pages: number;
   pagination: string;
-  by_statement: string;
+  by_statement?: string;
   identifiers: Identifier;
   classifications: Classification;
   publishers: Publisher[];
@@ -96,7 +98,7 @@ export interface BookInfo {
   subject_people: Subject_people[];
   subject_times: Subject_time[];
   excerpts: Excerpt[];
-  table_of_contents: Table_of_content[];
+  table_of_contents?: Table_of_content[];
   links: Link[];
   ebooks: Ebook[];
   cover: Cover;

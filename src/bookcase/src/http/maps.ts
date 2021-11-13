@@ -5,7 +5,7 @@ import { BookInfo } from "../models/bookInfo";
 export function mapDocToBook(doc: Doc): Book | undefined {
   try {
     const key = doc.edition_key ? doc.edition_key[0] : doc.key.split("/").pop();
-    if (!key) return null;
+    if (!key) return undefined;
     const title = doc.title;
     const editionKey = doc.cover_edition_key ?? null;
     const coverUrl = `http://covers.openlibrary.org/b/olid/${editionKey}-M.jpg`;
@@ -21,11 +21,11 @@ export function mapDocToBook(doc: Doc): Book | undefined {
   }
 }
 
-export function mapBookInfoToBook(info: BookInfo) {
+export function mapBookInfoToBook(info: BookInfo): Book {
   return {
     key: info.key,
     title: info.title,
-    coverUrl: info.cover.medium,
-    author: info.by_statement
+    coverUrl: info.cover.medium ?? null,
+    author: info.by_statement ?? null
   };
 }

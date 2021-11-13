@@ -1,6 +1,6 @@
 export interface Book {
-  key: string;
-  title: string,
-  coverUrl: string;
-  author: string;
+  key: string | null;
+  title: string | null,
+  coverUrl: string | null;
+  author: string | null;
 }
