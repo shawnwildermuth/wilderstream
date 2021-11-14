@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Book } from "../models/Book";
 import { SearchResult, Doc, Work } from "../models/search";
 import { mapDocToBook, mapBookInfoToBook } from "./maps";
@@ -25,9 +25,16 @@ export async function searchForBooks(search: string)  {
 
 export async function loadShelf() {
   const url = `${apiRoot}/shelf`;
-  const result = await axios.get<String[]>(url);
-  if (result.status === 200) {
-    return result.data;
+  try {
+    const result = await axios.get<String[]>(url);
+    if (result.status === 200) {
+      return result.data;
+    }
+  } catch (err: Error | AxiosError | any) {
+    if (axios.isAxiosError(err) && err.response?.status === 404) {
+      return new Array<string>();
+    } 
+    throw err;
   }
   return undefined;
 }
