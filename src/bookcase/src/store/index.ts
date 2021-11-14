@@ -7,8 +7,13 @@ export default createStore({
     bookList: new Array<Book>(),
     shelf: new Array<Book>(),
     isBusy: false,
-    error: "", 
-    currentUser: "swildermuth"
+    error: "",
+    user: {
+      username: "swildermuth",
+      fullName: "Shawn Wildermuth",
+      token: "as;ldkfj;alskdjf;laksdjf",
+      expiration: new Date("2021-12-31")
+    }
   },
   mutations: {
     setBookList(state, list: Array<Book>) {
@@ -40,7 +45,7 @@ export default createStore({
         commit("setError", "Failed to update shelf");
       }
     },
-    async loadShelf({state, commit}) {
+    async loadShelf({ state, commit }) {
       commit("setError", "");
       commit("setIsBusy");
       try {
@@ -57,7 +62,7 @@ export default createStore({
       } catch (error) {
         commit("setError", "Exception thrown while loading the shelf");
       } finally {
-         commit("clearIsBusy");
+        commit("clearIsBusy");
       }
 
     },
@@ -79,8 +84,11 @@ export default createStore({
     }
   },
   getters: {
-    isBookOnShelf: (state) => (book:Book) => {
+    isBookOnShelf: (state) => (book: Book) => {
       return state.shelf.findIndex(b => b.key === book.key) > -1;
+    },
+    isAuthenticated: (state) => {
+      return state.user.token.length > 0 && state.user.expiration > new Date();
     }
   }
 });

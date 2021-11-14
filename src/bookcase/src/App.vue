@@ -31,6 +31,12 @@
         <li class="ml-0 mr-1">
           <router-link to="/add" class="menu-item">Add to Library</router-link>
         </li>
+        <li class="ml-0 mr-1" v-if="isAuthenticated">
+          <router-link to="/logout" class="menu-item"><fa-icon icon="lock"></fa-icon> {{ fullName}} (logout)</router-link>
+        </li>
+        <li class="ml-0 mr-1" v-if="!isAuthenticated">
+          <router-link to="/login" class="menu-item"><fa-icon icon="user"></fa-icon> Login</router-link>
+        </li>
       </ul>
     </header>
     <div v-if="error" class="text-xl bg-red-500 text-white p-1">
@@ -53,12 +59,16 @@ export default defineComponent({
   setup() {
     const isBusy = computed(() => store.state.isBusy);
     const error = computed(() => store.state.error);
+    const fullName = computed(() => store.state.user.fullName);
+    const isAuthenticated = computed(() => store.getters.isAuthenticated);
 
     onMounted(() => store.dispatch("loadShelf"));
 
     return {
       isBusy,
       error,
+      isAuthenticated,
+      fullName
     };
   },
 });

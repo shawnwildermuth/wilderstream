@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
+@layer components {
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-bold;
   }
@@ -12,7 +12,7 @@
     @apply font-sans font-extralight text-lg;
   }
   input, button {
-    @apply font-sans font-extralight text-lg p-1 m-1 border-gray-200 border-solid;
+    @apply font-sans font-extralight text-lg p-1 m-1 border-gray-200 border-solid rounded-md;
   }
 
   button {
@@ -20,14 +20,22 @@
   }
 
   .btn {
-    @apply bg-blue-600 py-1 px-2 text-white border-none my-1 hover:bg-blue-800;
+    @apply bg-blue-600 py-1 px-2 text-white border border-solid rounded my-1 hover:bg-blue-800;
+  }
+
+  .btn.btn-cancel {
+    @apply bg-gray-500 text-white hover:bg-gray-600;
+  }
+
+  .btn.btn-sucess {
+    @apply bg-green-600 text-white hover:bg-green-800;
   }
 
   .btn[disabled] {
-    @apply bg-gray-200 text-gray-500 cursor-not-allowed;
+    @apply bg-gray-100 text-gray-500 cursor-not-allowed hover:bg-gray-100;
   }
 
   a.btn {
-    @apply no-underline;
+    @apply no-underline py-2;
   }
 }
