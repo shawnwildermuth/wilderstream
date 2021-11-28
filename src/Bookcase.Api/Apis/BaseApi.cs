@@ -17,6 +17,6 @@ public abstract class BaseApi : IApi
       return _baseUrl;
     }
 
-    return Path.Combine(_baseUrl, subPath);
+    return Path.Combine(_baseUrl, subPath).Replace("\\", "/");
   } 
 }

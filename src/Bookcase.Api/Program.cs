@@ -11,6 +11,8 @@ app.UseCors(cfg =>
   cfg.AllowAnyHeader();
 });
 
+app.UseAuthentication();
+
 RegisterApis(app);
 
 app.Run();
@@ -21,6 +23,15 @@ void RegisterServices(WebApplicationBuilder bldr)
   bldr.Services.AddCors();
   bldr.Services.AddTransient<ContainerFactory>();
   bldr.Services.AddScoped<DataService>();
+  bldr.Services.AddTransient<JwtService>();
+
+  // Authentication
+  bldr.Services.AddAuthentication().AddMicrosoftAccount(opt =>
+  {
+    opt.ClientId = bldr.Configuration["Authentication:Microsoft:ClientId"];
+    opt.ClientSecret = bldr.Configuration["Authentication:Microsoft:ClientSecret"];
+    opt.CallbackPath = "/auth/signin-msft";
+  });
 
   Assembly.GetExecutingAssembly().GetTypes()
     .Where(t => t.GetInterfaces().Contains(typeof(IApi)) &&

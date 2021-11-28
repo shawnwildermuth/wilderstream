@@ -7,13 +7,7 @@ export default createStore({
     bookList: new Array<Book>(),
     shelf: new Array<Book>(),
     isBusy: false,
-    error: "",
-    user: {
-      username: "swildermuth",
-      fullName: "Shawn Wildermuth",
-      token: "as;ldkfj;alskdjf;laksdjf",
-      expiration: new Date("2021-12-31")
-    }
+    error: ""
   },
   mutations: {
     setBookList(state, list: Array<Book>) {
@@ -86,9 +80,6 @@ export default createStore({
   getters: {
     isBookOnShelf: (state) => (book: Book) => {
       return state.shelf.findIndex(b => b.key === book.key) > -1;
-    },
-    isAuthenticated: (state) => {
-      return state.user.token.length > 0 && state.user.expiration > new Date();
     }
   }
 });

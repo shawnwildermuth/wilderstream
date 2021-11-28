@@ -29,13 +29,16 @@
           <router-link to="/" class="menu-item">Home</router-link>
         </li>
         <li class="ml-0 mr-1">
+          <router-link to="/shelf" class="menu-item">Your Shelf</router-link>
+        </li>
+        <li class="ml-0 mr-1">
           <router-link to="/add" class="menu-item">Add to Library</router-link>
         </li>
         <li class="ml-0 mr-1" v-if="isAuthenticated">
-          <router-link to="/logout" class="menu-item"><fa-icon icon="lock"></fa-icon> {{ fullName}} (logout)</router-link>
+          <a href="https://logout.microsoftonline.com" class="menu-item"><fa-icon icon="lock"></fa-icon> {{ fullName}} (logout)</a>
         </li>
         <li class="ml-0 mr-1" v-if="!isAuthenticated">
-          <router-link to="/login" class="menu-item"><fa-icon icon="user"></fa-icon> Login</router-link>
+          <a href="https://login.microsoftonline.com/consumers/" class="menu-item"><fa-icon icon="user"></fa-icon> Login</a>
         </li>
       </ul>
     </header>
@@ -52,6 +55,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from "vue";
 import store from "./store";
+import { msalInstance } from './authConfig';
 
 export default defineComponent({
   name: "App",
@@ -59,10 +63,8 @@ export default defineComponent({
   setup() {
     const isBusy = computed(() => store.state.isBusy);
     const error = computed(() => store.state.error);
-    const fullName = computed(() => store.state.user.fullName);
-    const isAuthenticated = computed(() => store.getters.isAuthenticated);
-
-    onMounted(() => store.dispatch("loadShelf"));
+    const fullName = computed(() => msalInstance.getActiveAccount()?.username);
+    const isAuthenticated = computed(() => msalInstance.getActiveAccount() !== null);
 
     return {
       isBusy,

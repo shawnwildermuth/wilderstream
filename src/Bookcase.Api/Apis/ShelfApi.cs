@@ -12,8 +12,8 @@ public class ShelfApi : BaseApi
   public override void Map(WebApplication app)
   {
     app.MapGet(MakeUrl(), Get);
-    app.MapPost(MakeUrl("{bookId}"), Upsert);
-    app.MapDelete(MakeUrl("{bookId}"), Delete);
+    app.MapPost(MakeUrl("item/{bookId}"), Upsert);
+    app.MapDelete(MakeUrl("item/{bookId}"), Delete);
   }
 
   async Task<IResult> Get(DataService svc)
