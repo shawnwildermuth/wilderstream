@@ -55,7 +55,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from "vue";
 import store from "./store";
-import { msalInstance } from './authConfig';
+import { authInstance, currentAuth } from './authConfig';
 
 export default defineComponent({
   name: "App",
@@ -63,8 +63,8 @@ export default defineComponent({
   setup() {
     const isBusy = computed(() => store.state.isBusy);
     const error = computed(() => store.state.error);
-    const fullName = computed(() => msalInstance.getActiveAccount()?.username);
-    const isAuthenticated = computed(() => msalInstance.getActiveAccount() !== null);
+    const fullName = computed(() => currentAuth.currentUser);
+    const isAuthenticated = computed(() => currentAuth.isAuthenticated);
 
     return {
       isBusy,

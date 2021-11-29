@@ -1,4 +1,11 @@
 import { LogLevel, PublicClientApplication, Configuration } from '@azure/msal-browser';
+import { reactive } from "vue";
+
+const theState = reactive({
+  isAuthenticated: false,
+  userName: "",
+  token: ""
+});
 
 // Config object to be passed to Msal on creation
 export const msalConfig = {
@@ -39,7 +46,7 @@ export const msalConfig = {
   }
 };
 
-export const msalInstance = new PublicClientApplication(msalConfig);
+export const authInstance = new PublicClientApplication(msalConfig);
 
 // Add here scopes for id token to be used at MS Identity Platform endpoints.
 export const loginRequest = {
@@ -50,20 +57,20 @@ export const loginRequest = {
 import { AuthenticationResult, EventType } from '@azure/msal-browser';
 
 // Account selection logic is app dependent. Adjust as needed for different use cases.
-const accounts = msalInstance.getAllAccounts();
+const accounts = authInstance.getAllAccounts();
 if (accounts.length > 0) {
-  msalInstance.setActiveAccount(accounts[0]);
+  authInstance.setActiveAccount(accounts[0]);
 }
 
-msalInstance.addEventCallback((event) => {
+authInstance.addEventCallback((event) => {
   if (event.eventType === EventType.LOGIN_SUCCESS && event.payload) {
     const payload = event.payload as AuthenticationResult;
     const account = payload.account;
-    msalInstance.setActiveAccount(account);
+    authInstance.setActiveAccount(account);
+    theState.isAuthenticated = true;
+    theState.userName = account?.name ?? "";
+    theState.token = payload?.accessToken ?? "";
   }
 });
 
-export const currentAuth = {
-  isAuthenticated,
-  currentUser
-}
+export const authState = theState;

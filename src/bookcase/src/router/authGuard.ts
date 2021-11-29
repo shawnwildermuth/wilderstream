@@ -1,5 +1,5 @@
 import { RouteLocationNormalized, Router } from "vue-router";
-import { msalInstance, loginRequest } from "../authConfig";
+import { authInstance, loginRequest } from "../authConfig";
 import { InteractionType, PopupRequest, PublicClientApplication, RedirectRequest } from "@azure/msal-browser";
 
 export function registerGuard(router: Router) {
@@ -9,7 +9,7 @@ export function registerGuard(router: Router) {
         ...loginRequest,
         redirectStartPage: to.fullPath
       }
-      const shouldProceed = await isAuthenticated(msalInstance, InteractionType.Redirect, request);
+      const shouldProceed = await isAuthenticated(authInstance, InteractionType.Redirect, request);
       return shouldProceed || '/failed';
     }
 

@@ -4,8 +4,6 @@ import "./assets/bookcase.css";
 import store from './store';
 import router from "./router";
 import fonts from "./utils/fonts";
-import { msalInstance } from './authConfig';
-
 
 const app = createApp(App)
   .use(store)
