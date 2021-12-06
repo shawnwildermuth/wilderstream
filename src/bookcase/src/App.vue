@@ -35,10 +35,10 @@
           <router-link to="/add" class="menu-item">Add to Library</router-link>
         </li>
         <li class="ml-0 mr-1" v-if="isAuthenticated">
-          <a href="https://logout.microsoftonline.com" class="menu-item"><fa-icon icon="lock"></fa-icon> {{ fullName}} (logout)</a>
+          <a href="#" @click.prevent="logout()" class="menu-item"><fa-icon icon="lock"></fa-icon> {{ fullName}} (logout)</a>
         </li>
         <li class="ml-0 mr-1" v-if="!isAuthenticated">
-          <a href="https://login.microsoftonline.com/consumers/" class="menu-item"><fa-icon icon="user"></fa-icon> Login</a>
+          <a href="#" @click.prevent="login()" class="menu-item"><fa-icon icon="user"></fa-icon> Login</a>
         </li>
       </ul>
     </header>
@@ -55,7 +55,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from "vue";
 import store from "./store";
-import { authInstance, currentAuth } from './authConfig';
+import { authInstance, authState } from './authConfig';
 
 export default defineComponent({
   name: "App",
@@ -63,14 +63,24 @@ export default defineComponent({
   setup() {
     const isBusy = computed(() => store.state.isBusy);
     const error = computed(() => store.state.error);
-    const fullName = computed(() => currentAuth.currentUser);
-    const isAuthenticated = computed(() => currentAuth.isAuthenticated);
+    const fullName = computed(() => authState.userName);
+    const isAuthenticated = computed(() => authState.isAuthenticated);
+
+    async function login() {
+      await authInstance.loginRedirect();
+    }
+
+    async function logout() {
+      await authInstance.logoutRedirect();
+    }
 
     return {
       isBusy,
       error,
       isAuthenticated,
-      fullName
+      fullName,
+      login,
+      logout
     };
   },
 });

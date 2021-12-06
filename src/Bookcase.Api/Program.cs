@@ -1,4 +1,7 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web;
 
 var bldr = WebApplication.CreateBuilder(args);
 RegisterServices(bldr);
@@ -12,6 +15,7 @@ app.UseCors(cfg =>
 });
 
 app.UseAuthentication();
+app.UseAuthorization();
 
 RegisterApis(app);
 
@@ -26,11 +30,22 @@ void RegisterServices(WebApplicationBuilder bldr)
   bldr.Services.AddTransient<JwtService>();
 
   // Authentication
-  bldr.Services.AddAuthentication().AddMicrosoftAccount(opt =>
+  bldr.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(jwt => {}, opt =>
   {
+    opt.Instance = "https://login.microsoftonline.com/consumers/";
+    opt.TenantId = "consumers";
     opt.ClientId = bldr.Configuration["Authentication:Microsoft:ClientId"];
     opt.ClientSecret = bldr.Configuration["Authentication:Microsoft:ClientSecret"];
-    opt.CallbackPath = "/auth/signin-msft";
+  });
+
+  // Secure by default
+  bldr.Services.AddAuthorization(cfg =>
+  {
+    cfg.FallbackPolicy = new AuthorizationPolicyBuilder()
+      .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+      .RequireAuthenticatedUser()
+      .Build();
   });
 
   Assembly.GetExecutingAssembly().GetTypes()

@@ -8,7 +8,7 @@ const theState = reactive({
 });
 
 // Config object to be passed to Msal on creation
-export const msalConfig = {
+export const msalConfig: Configuration = {
   auth: {
     clientId: 'cb32fdd7-9672-44d4-8027-1b2e71600456',
     redirectUri: 'http://localhost:3000', 
@@ -70,6 +70,12 @@ authInstance.addEventCallback((event) => {
     theState.isAuthenticated = true;
     theState.userName = account?.name ?? "";
     theState.token = payload?.accessToken ?? "";
+    console.log("Login Succeeded");
+  } else if(event.eventType === EventType.LOGOUT_SUCCESS) {
+    theState.isAuthenticated = false;
+    theState.userName = "";
+    theState.token = "";
+    console.log("Logout Succeeded");
   }
 });
 

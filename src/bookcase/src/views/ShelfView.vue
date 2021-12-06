@@ -14,7 +14,7 @@
 import { defineComponent, ref } from "vue";
 import store from "../store";
 import Book from "../components/BookControl.vue";
-import { Work } from "../models/books";
+import { Work } from "../models/search";
 
 export default defineComponent({
   components: {
@@ -26,6 +26,8 @@ export default defineComponent({
     function remove(book: Work) {
       store.dispatch("removeBookFromShelf", book);
     }
+
+    
 
     return {
       shelf,

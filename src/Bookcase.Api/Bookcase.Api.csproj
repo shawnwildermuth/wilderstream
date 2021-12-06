@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="6.0.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.22.0" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="1.21.0" />
   </ItemGroup>
 
 </Project>

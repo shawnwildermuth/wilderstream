@@ -5,6 +5,9 @@ import store from './store';
 import router from "./router";
 import fonts from "./utils/fonts";
 
+// REPLACE WITH vue-authenticate
+
+
 const app = createApp(App)
   .use(store)
   .use(router)
